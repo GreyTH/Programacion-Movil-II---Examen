@@ -1,0 +1,294 @@
+-- MySQL Workbench Forward Engineering
+
+SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
+SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
+SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION';
+
+-- -----------------------------------------------------
+-- Schema mydb
+-- -----------------------------------------------------
+-- -----------------------------------------------------
+-- Schema apimovil
+-- -----------------------------------------------------
+
+-- -----------------------------------------------------
+-- Schema apimovil
+-- -----------------------------------------------------
+CREATE SCHEMA IF NOT EXISTS `apimovil` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci ;
+USE `apimovil` ;
+
+-- -----------------------------------------------------
+-- Table `apimovil`.`cargos`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `apimovil`.`cargos` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `nombre` VARCHAR(50) NULL DEFAULT NULL,
+  `descripcion` TEXT NULL DEFAULT NULL,
+  PRIMARY KEY (`id`))
+ENGINE = InnoDB
+AUTO_INCREMENT = 15
+DEFAULT CHARACTER SET = utf8mb4
+COLLATE = utf8mb4_0900_ai_ci;
+
+
+-- -----------------------------------------------------
+-- Table `apimovil`.`clientes`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `apimovil`.`clientes` (
+  `clientid` BIGINT NOT NULL AUTO_INCREMENT,
+  `clientnombre` VARCHAR(128) NULL DEFAULT NULL,
+  `clientapellido` VARCHAR(128) NULL DEFAULT NULL,
+  `clienttelefono` VARCHAR(255) NULL DEFAULT NULL,
+  `clientemail` VARCHAR(255) NULL DEFAULT NULL,
+  `clientimagen` VARCHAR(255) NULL DEFAULT NULL,
+  `clientstatus` CHAR(3) NULL DEFAULT NULL,
+  PRIMARY KEY (`clientid`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8mb4
+COLLATE = utf8mb4_0900_ai_ci;
+
+
+-- -----------------------------------------------------
+-- Table `apimovil`.`inventarios`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `apimovil`.`inventarios` (
+  `id_inventario` INT NOT NULL AUTO_INCREMENT,
+  `fechahora` DATETIME NULL DEFAULT NULL,
+  `faltante` DOUBLE NULL DEFAULT NULL,
+  `sobrante` DOUBLE NULL DEFAULT NULL,
+  `usuariosRegistro` INT NULL DEFAULT NULL,
+  `estaciones` INT NULL DEFAULT NULL,
+  PRIMARY KEY (`id_inventario`))
+ENGINE = InnoDB
+AUTO_INCREMENT = 19
+DEFAULT CHARACTER SET = utf8mb4
+COLLATE = utf8mb4_0900_ai_ci;
+
+CREATE INDEX `id_idx` ON `apimovil`.`inventarios` (`usuariosRegistro` ASC) VISIBLE;
+
+
+-- -----------------------------------------------------
+-- Table `apimovil`.`empleados`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `apimovil`.`empleados` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `identidad` VARCHAR(15) NOT NULL,
+  `nombre` VARCHAR(50) NOT NULL,
+  `apellido` VARCHAR(50) NOT NULL,
+  `idcargo` INT NOT NULL,
+  `fechaingreso` DATE NULL DEFAULT NULL,
+  `salario` DOUBLE NULL DEFAULT NULL,
+  `nombreimagen` VARCHAR(250) NULL DEFAULT NULL,
+  `nombrecompleto` VARCHAR(250) NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  CONSTRAINT `id`
+    FOREIGN KEY (`idcargo`)
+    REFERENCES `apimovil`.`empleados` (`id`))
+ENGINE = InnoDB
+AUTO_INCREMENT = 15
+DEFAULT CHARACTER SET = utf8mb4
+COLLATE = utf8mb4_0900_ai_ci;
+
+CREATE INDEX `id_idx` ON `apimovil`.`empleados` (`idcargo` ASC) VISIBLE;
+
+
+-- -----------------------------------------------------
+-- Table `apimovil`.`usuarios`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `apimovil`.`usuarios` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `login` VARCHAR(30) NOT NULL,
+  `idempleado` INT NOT NULL,
+  `contrasena` VARCHAR(250) NOT NULL,
+  `accesototal` TINYINT(1) NOT NULL,
+  `habilitado` TINYINT(1) NOT NULL,
+  `pin` VARCHAR(4) NULL DEFAULT NULL,
+  `fallidos` INT NULL DEFAULT NULL,
+  `correo` VARCHAR(255) NULL DEFAULT NULL,
+  `estado` ENUM('BL', 'AC', 'IN') NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  CONSTRAINT `idemp_funcion_key`
+    FOREIGN KEY (`idempleado`)
+    REFERENCES `apimovil`.`empleados` (`id`))
+ENGINE = InnoDB
+AUTO_INCREMENT = 207
+DEFAULT CHARACTER SET = utf8mb4
+COLLATE = utf8mb4_0900_ai_ci;
+
+CREATE INDEX `idemp_funcion_key` ON `apimovil`.`usuarios` (`idempleado` ASC) VISIBLE;
+
+
+-- -----------------------------------------------------
+-- Table `apimovil`.`tipoproducto`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `apimovil`.`tipoproducto` (
+  `codigo_Tipo` INT NOT NULL AUTO_INCREMENT,
+  `Nombre_Tipo` VARCHAR(30) NULL DEFAULT NULL,
+  `Descripcion_Tipo` VARCHAR(50) NULL DEFAULT NULL,
+  `Orden` INT NULL DEFAULT NULL,
+  `Id_Tipo_Principal` INT NULL DEFAULT NULL,
+  `Nombre_Imagen` VARCHAR(250) NULL DEFAULT NULL,
+  PRIMARY KEY (`codigo_Tipo`))
+ENGINE = InnoDB
+AUTO_INCREMENT = 13
+DEFAULT CHARACTER SET = utf8mb4
+COLLATE = utf8mb4_0900_ai_ci;
+
+
+-- -----------------------------------------------------
+-- Table `apimovil`.`productos`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `apimovil`.`productos` (
+  `codigoProduct1` VARCHAR(15) NOT NULL,
+  `nombreProduct1` VARCHAR(40) NULL DEFAULT NULL,
+  `descripcionProduct1` TEXT NULL DEFAULT NULL,
+  `TipoProduct1` INT NULL DEFAULT NULL,
+  `existencia1` DOUBLE NULL DEFAULT NULL,
+  `precio1` DOUBLE NULL DEFAULT NULL,
+  `costo1` DOUBLE NULL DEFAULT NULL,
+  `cantidadminima1` DOUBLE NULL DEFAULT NULL,
+  `exento1` TINYINT NULL DEFAULT NULL,
+  `habilitado1` TINYINT NULL DEFAULT NULL,
+  `tipo2` ENUM('GE', 'EL', 'PR', 'AL') NULL DEFAULT NULL,
+  `orden1` INT NULL DEFAULT NULL,
+  `impuestov1` DOUBLE NULL DEFAULT NULL,
+  `impuestovalor1` DOUBLE NULL DEFAULT NULL,
+  `ultimo1` DOUBLE NULL DEFAULT NULL,
+  `nombreimagen1` VARCHAR(250) NULL DEFAULT NULL,
+  `idprincipal1` VARCHAR(15) NULL DEFAULT NULL,
+  `cantidadPrincial1` DOUBLE NULL DEFAULT NULL,
+  `idUsuario1` INT NULL DEFAULT NULL,
+  `movimiento1` VARCHAR(45) NULL DEFAULT NULL,
+  PRIMARY KEY (`codigoProduct1`),
+  CONSTRAINT `fk_codUsuario_key`
+    FOREIGN KEY (`idUsuario1`)
+    REFERENCES `apimovil`.`usuarios` (`id`),
+  CONSTRAINT `tipoproducto_funcion_key`
+    FOREIGN KEY (`TipoProduct1`)
+    REFERENCES `apimovil`.`tipoproducto` (`codigo_Tipo`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8mb3;
+
+CREATE INDEX `tipoproducto_funcion_key` ON `apimovil`.`productos` (`TipoProduct1` ASC) VISIBLE;
+
+CREATE INDEX `id_idx` ON `apimovil`.`productos` (`idUsuario1` ASC) VISIBLE;
+
+
+-- -----------------------------------------------------
+-- Table `apimovil`.`detalle_inventarios`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `apimovil`.`detalle_inventarios` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `Fisico` DOUBLE NOT NULL,
+  `ultimo` DOUBLE NOT NULL,
+  `ingreso` DOUBLE NOT NULL,
+  `egreso` DOUBLE NOT NULL,
+  `precio` DOUBLE NOT NULL,
+  `actual` DOUBLE NULL DEFAULT NULL,
+  `balanceunidad` DOUBLE NULL DEFAULT NULL,
+  `balanceprecio` DOUBLE NULL DEFAULT NULL,
+  `productos_Codigo` VARCHAR(15) NOT NULL,
+  `inventarios_id` INT NOT NULL,
+  PRIMARY KEY (`id`),
+  CONSTRAINT `cod_inventario_key`
+    FOREIGN KEY (`inventarios_id`)
+    REFERENCES `apimovil`.`inventarios` (`id_inventario`),
+  CONSTRAINT `cod_product_key`
+    FOREIGN KEY (`productos_Codigo`)
+    REFERENCES `apimovil`.`productos` (`codigoProduct1`))
+ENGINE = InnoDB
+AUTO_INCREMENT = 9
+DEFAULT CHARACTER SET = utf8mb3;
+
+CREATE INDEX `cod_product_key` ON `apimovil`.`detalle_inventarios` (`productos_Codigo` ASC) VISIBLE;
+
+CREATE INDEX `cod_inventario_key` ON `apimovil`.`detalle_inventarios` (`inventarios_id` ASC) VISIBLE;
+
+
+-- -----------------------------------------------------
+-- Table `apimovil`.`impuestos`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `apimovil`.`impuestos` (
+  `id_impuesto` INT NOT NULL AUTO_INCREMENT,
+  `nombre_imp` VARCHAR(45) NOT NULL,
+  `valor_imp` DECIMAL(10,4) NOT NULL,
+  PRIMARY KEY (`id_impuesto`))
+ENGINE = InnoDB
+AUTO_INCREMENT = 15
+DEFAULT CHARACTER SET = utf8mb4
+COLLATE = utf8mb4_0900_ai_ci;
+
+
+-- -----------------------------------------------------
+-- Table `apimovil`.`inventarios_fisico`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `apimovil`.`inventarios_fisico` (
+  `id_ifisico` INT NOT NULL AUTO_INCREMENT,
+  `productos_cod` VARCHAR(15) NOT NULL,
+  `inventarios_id` INT NOT NULL,
+  `cantidad_actual` DOUBLE NULL DEFAULT NULL,
+  `cantidad_sistema` DOUBLE NULL DEFAULT NULL,
+  `costo` DOUBLE NULL DEFAULT NULL,
+  `precio` DOUBLE NULL DEFAULT NULL,
+  `fechahora` DATETIME NULL DEFAULT NULL,
+  `balance_existencia` DOUBLE NULL DEFAULT NULL,
+  `faltante` DOUBLE NULL DEFAULT NULL,
+  `sobrante` DOUBLE NULL DEFAULT NULL,
+  PRIMARY KEY (`id_ifisico`),
+  CONSTRAINT `codproduct_product_key_idx`
+    FOREIGN KEY (`productos_cod`)
+    REFERENCES `apimovil`.`productos` (`codigoProduct1`),
+  CONSTRAINT `idinventario_product_key`
+    FOREIGN KEY (`inventarios_id`)
+    REFERENCES `apimovil`.`inventarios` (`id_inventario`))
+ENGINE = InnoDB
+AUTO_INCREMENT = 17
+DEFAULT CHARACTER SET = utf8mb3;
+
+CREATE INDEX `idinventario_product_key` ON `apimovil`.`inventarios_fisico` (`inventarios_id` ASC) VISIBLE;
+
+CREATE INDEX `codproduct_product_key_idx` ON `apimovil`.`inventarios_fisico` (`productos_cod` ASC) VISIBLE;
+
+
+-- -----------------------------------------------------
+-- Table `apimovil`.`productos_impuestos`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `apimovil`.`productos_impuestos` (
+  `idproducto` VARCHAR(15) NOT NULL,
+  `idimpuesto` INT NOT NULL,
+  PRIMARY KEY (`idproducto`, `idimpuesto`),
+  CONSTRAINT `imp_product_key`
+    FOREIGN KEY (`idimpuesto`)
+    REFERENCES `apimovil`.`impuestos` (`id_impuesto`),
+  CONSTRAINT `product_imp_key`
+    FOREIGN KEY (`idproducto`)
+    REFERENCES `apimovil`.`productos` (`codigoProduct1`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8mb3;
+
+CREATE INDEX `product_imp_key_idx` ON `apimovil`.`productos_impuestos` (`idimpuesto` ASC) VISIBLE;
+
+
+-- -----------------------------------------------------
+-- Table `apimovil`.`promociones`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `apimovil`.`promociones` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `productos_Codigo` VARCHAR(15) NOT NULL,
+  `inicio` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `fin` DATETIME NOT NULL,
+  `creado` DATETIME NULL DEFAULT NULL,
+  `modificado` DATETIME NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  CONSTRAINT `cod_producto`
+    FOREIGN KEY (`productos_Codigo`)
+    REFERENCES `apimovil`.`productos` (`codigoProduct1`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8mb3;
+
+CREATE INDEX `cod_producto` ON `apimovil`.`promociones` (`productos_Codigo` ASC) VISIBLE;
+
+
+SET SQL_MODE=@OLD_SQL_MODE;
+SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
+SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
