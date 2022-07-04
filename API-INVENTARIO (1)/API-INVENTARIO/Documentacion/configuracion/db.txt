@@ -1,0 +1,27 @@
+//LLAMAMOS LOS PAQUETES
+const sequelize = require('sequelize');
+const db = new sequelize( //definimos la constante 
+
+    'apimovil', //nombre de la base de datos
+    'newuser',  // usuario de la base de datos
+    'Konoha%33',  //contraseña de la base de datos
+
+    {
+        host: 'localhost',  //nombre del host
+        dialect: 'mysql',
+        port: 3307, //numero del puerto
+        pool: {
+            max: 100,
+            min: 5,
+            idle: 20000,
+            evict: 15000,
+            acquire: 30000
+        },
+
+
+    }
+
+);
+
+//exportamos el modelo db
+module.exports = db;

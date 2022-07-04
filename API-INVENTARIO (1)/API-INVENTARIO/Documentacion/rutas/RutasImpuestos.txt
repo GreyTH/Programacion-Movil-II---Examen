@@ -1,0 +1,33 @@
+//requerimos las librerias
+const { Router } = require('express');
+const { body, query } = require('express-validator');
+const controladorImpuestos = require('../controladores/controladorImpuestos'); //requiere contraldor impuesto
+const rutas = Router();
+rutas.get('/', controladorImpuestos.InicioRutas); //definiicon de la ruta inicial del modulo impuestos
+
+rutas.get('/listar', controladorImpuestos.Listar); //definiicon de la ruta Listar del modulo impuestos
+
+rutas.post('/guardar/',  //definicion de la ruta Guardar del modulo impuestos
+//validaciones de los datos a ingresar
+    body('nombre_imp01').notEmpty().withMessage('Debe escribir el Nombre del Impuesto').isString().withMessage('El Nombre del Impuesto debe de Ingresar Letras!!'),
+    body('valor_imp01').notEmpty().withMessage('Debe escribir el Valor del Impuesto').isDecimal().withMessage('En el Valor del Impuesto, -Ingresar Decimales!!'),
+
+
+    controladorImpuestos.GuardarPost);
+
+rutas.put('/modificar/', //definiicon de la ruta Modificar del modulo impuestos
+ //validaciones de los datos a ingresar
+    query('id').notEmpty().withMessage('Debe escribir el ID del Cargo').isInt().withMessage('El ID del Cargo debe ser un NÚmero Entero'),
+    body('nombre_imp01').notEmpty().withMessage('Debe escribir el Nombre del Impuesto').isString().withMessage('El Nombre del Impuesto debe de Ingresar Letras!!'),
+    body('valor_imp01').notEmpty().withMessage('Debe escribir el Valor del Impuesto').isDecimal().withMessage('En el Valor del Impuesto, -Ingresar Decimales!!'),
+    controladorImpuestos.ModificarPut);
+
+
+rutas.delete('/eliminar/',  //definiicon de la ruta Eliminar del modulo impuestos
+//validaciones de los datos a ingresar
+    query('id').notEmpty().withMessage('Debe escribir el id del usuario')
+    .isInt().withMessage('El id del usuario debe ser un numero entero'),
+    controladorImpuestos.Eliminar);
+
+    //Exportar el modulo rutas
+module.exports = rutas;

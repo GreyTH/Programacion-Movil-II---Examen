@@ -1,0 +1,48 @@
+const { DataTypes } = require('sequelize'); //dataType maneja los tipos
+const db = require('../configuraciones/db'); //rquerimos las configuraciones de la base de datos
+const Tproducto = db.define(
+    'tipoproducto', //definicion del nombre del modelo
+
+    { //estos son datos de las tablas
+        codigo_Tipo: {
+            type: DataTypes.INTEGER,  //tipo de dato
+            primaryKey: true, //define que es una llave primaria
+            autoIncrement: true, //es un dato autoincrementable
+            allowNull: false, // difine si se permiten datos nulos
+        },
+
+        Nombre_Tipo: {
+            type: DataTypes.STRING(30), //tipo de dato
+            allowNull: false, // difine si se permiten datos nulos
+        },
+
+        Descripcion_Tipo: {
+            type: DataTypes.STRING(50), //tipo de dato
+            allowNull: false, // difine si se permiten datos nulos
+        },
+
+        Orden: {
+            type: DataTypes.INTEGER, //tipo de dato
+            allowNull: false, // difine si se permiten datos nulos
+        },
+
+        Id_Tipo_Principal: {
+            type: DataTypes.INTEGER, //tipo de dato
+            allowNull: false, // difine si se permiten datos nulos
+        },
+
+        Nombre_Imagen: {
+            type: DataTypes.STRING(250), //tipo de dato
+            allowNull: false, // difine si se permiten datos nulos
+        } 
+    },
+
+    {
+        tableName: 'TipoProducto', //nombre de la tabla de la abse de datos
+        timestamps: false, //devuelve una indicación de fecha y hora a partir de un valor o par de valores
+    }
+);
+ //definir el modelo se pone el nombre que quiera
+
+//exportar el modelo
+module.exports = Tproducto;

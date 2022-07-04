@@ -1,0 +1,122 @@
+const { DataTypes } = require('sequelize'); //dataType maneja los tipos
+const db = require('../configuraciones/db'); //rquerimos las configuraciones de la base de datos
+
+
+const Producto = db.define(
+
+    'producto', ///indicar el nombre del MODELO
+
+
+    {
+        codigoProduct1: {
+            type: DataTypes.STRING(15), //tipo de dato
+            primaryKey: true,
+            autoIncrement: true,
+            allowNull: false,
+        },
+        nombreProduct1: {
+            type: DataTypes.STRING(40), //tipo de dato
+            allowNull: false,
+        },
+        descripcionProduct1: {
+            type: DataTypes.TEXT, //tipo de dato
+            allowNull: true,
+        },
+        TipoProduct1: {
+            type: DataTypes.INTEGER, //tipo de dato
+            allowNull: true,
+
+        },
+        existencia1: {
+            type: DataTypes.DOUBLE, //tipo de dato
+            allowNull: true,
+        },
+        precio1: {
+            type: DataTypes.DOUBLE, //tipo de dato
+            allowNull: true,
+
+        },
+        costo1: {
+            type: DataTypes.DOUBLE, //tipo de dato
+            allowNull: true,
+
+        },
+        cantidadminima1: {
+            type: DataTypes.DOUBLE, //tipo de dato
+            allowNull: true,
+
+        },
+        exento1: {
+            type: DataTypes.TINYINT, //tipo de dato
+            allowNull: true,
+
+        },
+
+        habilitado1: {
+            type: DataTypes.TINYINT, //tipo de dato
+            allowNull: true,
+
+        },
+        tipo2: {
+            type: DataTypes.ENUM('GE', 'EL', 'PR', 'AL'), //tipo de dato, con sus respectivos valores                                                                  
+            allowNull: true,
+            defaultValue: 'GE'
+        },
+        orden1: {
+            type: DataTypes.INTEGER, //tipo de dato
+            allowNull: true,
+
+        },
+        impuestov1: {
+            type: DataTypes.DOUBLE, //tipo de dato
+            allowNull: true,
+
+        },
+        impuestovalor1: {
+            type: DataTypes.DOUBLE, //tipo de dato
+            allowNull: true,
+
+        },
+        ultimo1: {
+            type: DataTypes.DOUBLE, //tipo de dato
+            allowNull: true,
+
+        },
+        nombreimagen1: {
+            type: DataTypes.STRING(250), //tipo de dato
+            allowNull: true,
+
+        },
+        idprincipal1: { 
+            type: DataTypes.STRING(15), //tipo de dato
+            allowNull: true,
+
+        },
+        cantidadPrincial1: {
+            type: DataTypes.DOUBLE, //tipo de dato
+            allowNull: true,
+
+        },
+
+        idUsuario1: {
+            type: DataTypes.INTEGER, //tipo de dato
+            allowNull: true,
+
+        },
+        movimiento1: {
+            type: DataTypes.STRING(45), //tipo de dato
+            allowNull: true,
+
+        }
+
+    },
+
+    {
+
+        tableName: 'productos', //nombre de la tabla en la base de datos
+        timestamps: false,
+    }
+); //definir el modelo se pone el nombre que quiera
+
+//exportar el modelo
+module.exports = Producto;

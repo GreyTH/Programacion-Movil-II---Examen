@@ -1,0 +1,33 @@
+const { DataTypes } = require('sequelize');  //dataType maneja los tipos
+const db = require('../configuraciones/db'); //rquerimos las configuraciones de la base de datos
+
+//NOMBRE DEL MODELO 
+const Productos_Impuestos = db.define(
+    
+    'Productos_impuestos', //indicar el nombre del MODELO
+
+    //DEFINIR LAS COLUMNAS QUE SON PARTE DE LA TABLA MYSQL BASE DE DATOS
+    {
+        idproducto: { 
+            type: DataTypes.STRING(128), //tipo de dato
+            primaryKey: true,
+            allowNull: false,
+        },
+        idimpuesto: {
+            type: DataTypes.INTEGER, //tipo de dato
+            primaryKey: true,
+            allowNull: false,
+        },
+
+    },
+
+    {
+        //opciones de connfiguracion NOMBRE DE LA TABLA DE LA BASE DE DATOS
+        tableName: 'productos_impuestos',
+        timestamps: false, //FECHA Y HORA DE CREACION Y DE MOFICIACION NO SE AGEREGRE
+    }
+);
+ //definir el modelo se pone el nombre que quiera
+
+//exportar el modelo
+module.exports = Productos_Impuestos;

@@ -1,0 +1,135 @@
+const { validationResult } = require('express-validator');
+const ModeloProductos_impuestos = require('../modelos/ModeloProductos_Impuestos'); //requerimos al modelo principal
+const ModeloImpuesto = require('../modelos/ModeloImpuesto'); //requerimos al modelo impuesto
+const ModeloProducto = require('../modelos/ModeloProducto'); //requerimos al modelo producto
+
+exports.InicioRutas = (req, res) => {
+
+    const listaRutas = [ //listamso detalladamente cada uno de los metodos y rutas a utilizar
+        { metodo: "GET", peticion: "Listar", ruta: "/api/producto_impuesto/listar" },
+        { metodo: "POST", peticion: "Guardar", ruta: "/api/producto_impuesto/guardar" },
+        { metodo: "PUT", peticion: "Modificar", ruta: "/api/producto_impuesto/modificar" },
+        { metodo: "DELETE", peticion: "Eliminar", ruta: "/api/producto_impuesto/eliminar" },
+    ];
+
+    const DescripcionModulos = [{  //Descripcion de cada metodo, con sus respectiva ruta
+        modulo: "producto_impuesto",
+        rutas: [{
+                ruta: "/api/producto_impuesto", //ruta especifica del modulo y el tipo de metodo
+                metodo: "get",
+                parametros: "", //parametros enviados
+                descripcion: "Inicio del módulo de producto_impuesto"
+            },
+            {
+                ruta: "/api/producto_impuesto/listar",
+                metodo: "get",
+                parametros: "",
+                descripcion: "Lista todos los producto_impuesto"
+            },
+
+            {
+                ruta: "/api/producto_impuesto/guardar",
+                metodo: "post",
+                parametros: {
+                    idproducto01: "El Codigo del Producto. Debe de Existir en la Tabla Producto",
+                    idimpuesto01: "El Codigo del Impuesto. Debe de Existir en la Tabla Impuesto",
+                },
+                descripcion: "Guarda los datos del producto_impuesto"
+            },
+
+        ],
+    }];
+
+    const msj = {
+
+        api: "API-Inventario",
+        Modulo: "producto_impuesto",
+        desarrollador: "Karen Alexandra Juárez",
+        fecha: "27/07/2022",
+        listaRutas,
+        DescripcionModulos
+    };
+
+    res.json(msj); //envio de respuesta, terminacion de porceso
+};
+
+
+exports.Listar = async(req, res) => {
+    var msj = {
+        mensaje: ''
+    }
+    try { //mediante el try se listaran los datos del modelo productos impuestos
+
+        const lista = await ModeloProductos_impuestos.findAll(); //constante lista, await devolvera
+        console.log(JSON.stringify(lista)); //stringify convierte un valor en una cadena de texto 
+        res.json(lista);
+
+    } catch (error) {  //de no encontrar lo especificado mostrara un error
+        console.error(error);
+        msj.mensaje = 'Ocurrió un Error!!';
+        res.json(msj); //envio de respuesta, terminacion de porceso
+    }
+
+
+};
+
+exports.GuardarPost = async(req, res) => {
+    const validaciones = validationResult(req);
+    console.log(validaciones.errors[0]);
+    console.log(req.body);
+    const { idproducto01, idimpuesto01 } = req.body; //todos los datos los reuqiere en el body
+    var msj = {
+        mensaje: ''
+    };
+    if (validaciones.errors.length > 0) {
+        validaciones.errors.forEach(element => {
+            msj.mensaje += element.msg + ' . ';
+
+        });
+
+    } else {
+        try {
+            var buscarProducto = await ModeloProducto.findOne({ //definimos variable inventario, donde devolvera el dato buscado
+                where: {
+                    codigoProduct1: idproducto01
+                }
+            });
+
+            var buscarimpuesto = await ModeloImpuesto.findOne({ //definimos variable inventario, donde devolvera el dato buscado
+                where: {
+                    id_impuesto: idimpuesto01
+                }
+            });
+            if (!buscarProducto || !buscarimpuesto) {
+
+                msj.mensaje = 'El Producto o el Impuesto no Existen!!';
+
+            } else {
+                var buscarExistente = await ModeloProductos_impuestos.findOne({ //definimos variable inventario, donde devolvera los datos buscados
+                    where: { //donde idproducto es igual a idproducto01, idimpuesto es igual a idimpues01
+                        idproducto: idproducto01,
+                        idimpuesto: idimpuesto01
+                    }
+                });
+                if (!buscarExistente) {
+
+                    await ModeloProductos_impuestos.create({ //se devolveran los datos idproducto y idimpuesto
+                        idproducto: idproducto01,
+                        idimpuesto: idimpuesto01
+                    });
+                    msj.mensaje = 'Registro Correctamente!!';
+
+                } else {
+                    //de no cumplir con la sentencia enviada mostrara un mensaje
+                    msj.mensaje = 'Este Producto ya tiene el Impuesto Asociado!!';
+                }
+            }
+
+        } catch (error) {
+            console.error(error);
+            msj.mensaje = 'ERROR!!! Al Guardar los Datos ';
+        }
+
+    }
+    res.json(msj);  //envio de respuesta, terminacion de porceso
+};

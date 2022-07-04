@@ -1,0 +1,46 @@
+const { DataTypes } = require('sequelize'); //dataType maneja los tipos
+const db = require('../configuraciones/db'); //rquerimos las configuraciones de la base de datos
+const Inventario = db.define(
+    'inventario', //nombre del modelo
+     //DEFINIR LAS COLUMNAS QUE SON PARTE DE LA TABLA MYSQL BASE DE DATOS
+    { //estos son datos de las tablas
+        id_inventario: {
+            type: DataTypes.INTEGER, //tipo de dato
+            primaryKey: true,
+            autoIncrement: true,
+            allowNull: false,
+        }, //definimos las columnas que son parte de las tablas
+
+        fechahora: {
+            type: DataTypes.DATE, //tipo de dato
+            allowNull: true,
+        },
+        faltante: {
+            type: DataTypes.DOUBLE, //tipo de dato
+            allowNull: true,
+        },
+
+        sobrante: {
+            type: DataTypes.DOUBLE, //tipo de dato
+            allowNull: true,
+        },
+
+        usuariosRegistro: {
+            type: DataTypes.INTEGER, //tipo de dato
+            allowNull: true,
+        },
+
+        estaciones: {
+            type: DataTypes.INTEGER, //tipo de dato
+            allowNull: true,
+        }
+    },
+
+    {
+        tableName: 'inventarios', //nombre de la tabla
+        timestamps: false,
+    }
+); //definir el modelo se pone el nombre que quiera
+
+//exportar el modelo
+module.exports = Inventario;
